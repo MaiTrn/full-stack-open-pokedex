@@ -41,6 +41,13 @@ jobs:
           healthcheck: https://infinite-ridge-75598.herokuapp.com/health
           checkstring: "ok"
           rollbackonhealthcheckfailed: true
+  tagging_pipeline:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v1
+        with:
+          node-version: "14.x"
       - name: Bump version and push tag
         if: ${{ github.event_name == 'push' }}
         uses: anothrNick/github-tag-action@1.33.0
