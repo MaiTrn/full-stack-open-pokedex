@@ -43,6 +43,7 @@ jobs:
           rollbackonhealthcheckfailed: true
       - name: Indicate error if the build fails
         if: failure()
+        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message),'#skip')}}
         uses: 8398a7/action-slack@v3.12.0
         with:
           status: ${{ job.status }}
@@ -51,6 +52,7 @@ jobs:
           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Indicate success if a new version is deployed
         if: success()
+        if: ${{ github.event_name == 'push' && !contains(join(github.event.commits.*.message),'#skip')}}
         uses: 8398a7/action-slack@v3.12.0
         with:
           status: custom
