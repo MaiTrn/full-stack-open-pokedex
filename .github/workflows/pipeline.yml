@@ -52,3 +52,30 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           DEFAULT_BUMP: patch
           WITH_V: true
+  notifications_pipeline:
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: Indicate error if the build fails
+        if: ${{ job.status !== 'success'}}
+        uses: 8398a7/action-slack@v3.12.0
+        with:
+          status: ${{ job.status }}
+          fields: repo, message, commit, author, took
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+      - name: Indicate success if a new version is deployed
+        if: ${{ job.status === 'success'}}
+        uses: 8398a7/action-slack@v3.12.0
+        with:
+          status: custom
+          fields: workflow,job,commit,repo,ref,author,took
+          custom_payload: |
+            {
+              attachments: [{
+                color: 'good'
+                text: `a new version deployed to https://infinite-ridge-75598.herokuapp.com (${process.env.AS_COMMIT}) of ${process.env.AS_REPO} by ${process.env.AS_AUTHOR} build took ${process.env.AS_TOOK}`,
+              }]
+            }
+          env:
+            SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
