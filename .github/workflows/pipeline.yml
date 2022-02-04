@@ -57,7 +57,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Indicate error if the build fails
-        if: ${{ job.status !== 'success'}}
+        if: ${{ job.status != 'success'}}
         uses: 8398a7/action-slack@v3.12.0
         with:
           status: ${{ job.status }}
@@ -65,7 +65,7 @@ jobs:
           env:
             SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
       - name: Indicate success if a new version is deployed
-        if: ${{ job.status === 'success'}}
+        if: ${{ job.status == 'success'}}
         uses: 8398a7/action-slack@v3.12.0
         with:
           status: custom
