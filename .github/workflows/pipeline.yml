@@ -54,7 +54,7 @@ jobs:
         uses: 8398a7/action-slack@v3.12.0
         with:
           status: custom
-          fields: workflow,job,commit,repo,ref,author,took
+          fields: commit,repo,ref,author,took
           custom_payload: |
             {
               attachments: [{
